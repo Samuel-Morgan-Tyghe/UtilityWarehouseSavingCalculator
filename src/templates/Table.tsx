@@ -137,7 +137,7 @@ const InputTable = () => {
   return (
     <div className="App">
       <form className="d-flex flex-col align-items-center">
-        <h1>What do you pay on average for Electricity + Gas?</h1>
+        <h1>What do you pay on average for Electricity + Gas per month?</h1>
         <span
           className="d-flex align-baseline items-center align-items-center
         "
