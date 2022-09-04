@@ -54,18 +54,18 @@ const InputTable = () => {
 
   useEffect(() => {
     const initRows = [
-      createData('September', 164, 1971),
-      createData('October - 80% rise', 296, 3549),
-      createData('November', 296, 3549),
-      createData('December', 296, 3549),
-      createData('January - 52% rise', 449, 5389),
-      createData('Febuary', 449, 5389),
-      createData('March', 449, 5389),
-      createData('April', 551, 6616),
-      createData('May', 551, 6616),
-      createData('June', 551, 6616),
-      createData('July - 11% drop', 491, 5897),
-      createData('August', 491, 5897),
+      createData('September', 213, 1971),
+      createData('October - 80% rise', 384, 3549),
+      createData('November', 384, 3549),
+      createData('December', 384, 3549),
+      createData('January - 52% rise', 582, 5389),
+      createData('Febuary', 582, 5389),
+      createData('March', 582, 5389),
+      createData('April', 715, 6616),
+      createData('May', 715, 6616),
+      createData('June', 715, 6616),
+      createData('July - 11% drop', 637, 5897),
+      createData('August', 637, 5897),
     ];
 
     const vTDenominator = initRows[0]?.variableTarriff ?? 0;
