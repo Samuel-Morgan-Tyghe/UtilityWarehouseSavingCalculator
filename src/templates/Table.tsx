@@ -55,16 +55,16 @@ const InputTable = () => {
   useEffect(() => {
     const initRows = [
       createData('September', 164, 1971),
-      createData('October', 296, 3549),
+      createData('October - 80% rise', 296, 3549),
       createData('November', 296, 3549),
       createData('December', 296, 3549),
-      createData('January', 449, 5389),
+      createData('January - 52% rise', 449, 5389),
       createData('Febuary', 449, 5389),
       createData('March', 449, 5389),
       createData('April', 551, 6616),
       createData('May', 551, 6616),
       createData('June', 551, 6616),
-      createData('July', 491, 5897),
+      createData('July - 11% drop', 491, 5897),
       createData('August', 491, 5897),
     ];
 
