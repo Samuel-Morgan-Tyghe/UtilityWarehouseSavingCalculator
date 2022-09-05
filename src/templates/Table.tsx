@@ -327,6 +327,7 @@ const InputTable = () => {
                               ? ""
                               : "red",
                           color: row.profit !== 0 ? "white" : "",
+                          fontWeight: "bold",
                         }}
                         /* eslint-enable */
                         align="right"
@@ -342,6 +343,8 @@ const InputTable = () => {
                   '&:last-child td, &:last-child th': { border: 0 },
                   'th,td:not(:last-child)': {
                     color: 'white',
+                    fontWeight: 'bold',
+
                     backgroundColor: 'orange',
                   },
                 }}
@@ -398,6 +401,7 @@ const InputTable = () => {
                           : "orange"
                         : "red",
                     color: "white",
+                    fontWeight: "bold",
                   }}
                   /* eslint-enable */
 
@@ -412,6 +416,7 @@ const InputTable = () => {
                   'th,td:not(:last-child)': {
                     color: 'white',
                     backgroundColor: 'red',
+                    fontWeight: 'bold',
                   },
                 }}
                 className="text-light text-red-500-contras"
@@ -466,6 +471,7 @@ const InputTable = () => {
                   sx={{
                     backgroundColor: savings > 0 ? 'green' : 'red',
                     color: 'white',
+                    fontWeight: 'bold',
                   }}
                   align="right"
                 >
