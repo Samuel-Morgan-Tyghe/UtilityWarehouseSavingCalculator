@@ -2,6 +2,7 @@ import { Background } from '../background/Background';
 import { Section } from '../layout/Section';
 import { NavbarTwoColumns } from '../navigation/NavbarTwoColumns';
 import { Logo } from './Logo';
+import { MoreInfo } from './MoreInfo';
 import { InputTable } from './Table';
 
 const Hero = () => (
@@ -21,8 +22,9 @@ const Hero = () => (
       </NavbarTwoColumns>
     </Section>
 
-    <Section yPadding="pt-20 pb-32">
+    <Section yPadding="pt-20 pb-32 mw-100">
       <InputTable />
+      <MoreInfo />
       {/* <HeroOneButton
         title={
           <>

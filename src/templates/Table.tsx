@@ -131,6 +131,7 @@ const InputTable = () => {
     setInitCost(cost);
   };
   const [moreDetails, setMoreDetails] = useState<boolean>(false);
+  const [perMonth, setPerMonth] = useState<boolean>(true);
   const toggleTableDepth = () => {
     setMoreDetails(!moreDetails);
   };
@@ -138,18 +139,24 @@ const InputTable = () => {
     <div className="App">
       <form className="d-flex flex-col align-items-center">
         <h1>What do you pay on average for Electricity + Gas per month?</h1>
+        <p>What did you Pay for the month of August?</p>
         <span
           className="d-flex align-baseline items-center align-items-center
         "
         >
           <p className="m-0">£</p>
           <input
-            className="w-50 p-2 m-2"
+            className="w-100 p-2 m-2"
             type="number"
             value={initCost}
+            placeholder="Calculations start at August
+            Rate"
             onChange={(e) => handleChange(e.target.value as any)}
           ></input>
         </span>
+        <p>Calculations start at August Rate and assume consistent usage</p>
+        <p>* Note: Prices will fluctuate depending on how much you use *</p>
+
         <span className="d-flex align-baseline items-center align-items-center align-items-center">
           <p className="m-0">Detailed Table</p>
           <Switch
@@ -158,41 +165,66 @@ const InputTable = () => {
             inputProps={{ 'aria-label': 'controlled' }}
           />
         </span>
+        {moreDetails && (
+          <span className="d-flex align-baseline items-center align-items-center align-items-center">
+            <p className="m-0">{perMonth ? 'Per Month' : 'Per Year'}</p>
+            <Switch
+              checked={perMonth}
+              onChange={() => setPerMonth(!perMonth)}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </span>
+        )}
       </form>
       <div className={'d-flex w-100 p-5'}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
-              <TableRow>
-                <TableCell>Month</TableCell>
+              <TableRow
+                sx={{
+                  '&:last-child td, &:last-child th': {
+                    backgroundColor: 'ghostwhite',
+                  },
+                }}
+              >
+                <TableCell sx={{ backgroundColor: 'ghostwhite' }}>
+                  Month
+                </TableCell>
                 {moreDetails && (
                   <>
+                    {perMonth ? (
+                      <>
+                        <TableCell align="right">
+                          Current Variable Tariff (Utility Warehouse
+                          Predictions) per month
+                        </TableCell>
+                        <TableCell align="right">
+                          OffGem Predictions per Month Rate
+                        </TableCell>
+                        <TableCell align="right">
+                          Utility Warehouse fixed Month rate
+                        </TableCell>
+                      </>
+                    ) : (
+                      <>
+                        <TableCell align="right">
+                          OffGem Predictions per Year Rate
+                        </TableCell>
+                        <TableCell align="right">
+                          Utility Warehouse fixed Year rate
+                        </TableCell>
+                      </>
+                    )}
                     <TableCell align="right">
-                      Current Variable Tariff (Utility Warehouse Predictions)
-                      per month
+                      Utility Warehouse Predicted rate Monthly Cost *
                     </TableCell>
-                    <TableCell align="right">
-                      OffGem Predictions per Month Rate
-                    </TableCell>
-                    <TableCell align="right">
-                      Utility Warehouse fixed Month rate
-                    </TableCell>
-                    <TableCell align="right">
-                      OffGem Predictions per Year Rate
-                    </TableCell>
-                    <TableCell align="right">
-                      Utility Warehouse fixed Year rate
-                    </TableCell>
-                    <TableCell align="right">
-                      Utility Warehouse Predicted rate Monthly Cost
-                    </TableCell>{' '}
                   </>
                 )}
                 <TableCell align="right">
-                  Offgem Predicted Price Cap Monthly Rate
+                  Offgem Predicted Price Cap Monthly Rate *
                 </TableCell>
                 <TableCell align="right">
-                  Utility Warehouse fixed Year rate Monthly Cost
+                  Utility Warehouse fixed Year rate Monthly Cost *
                 </TableCell>
                 <TableCell align="right">Savings</TableCell>
               </TableRow>
@@ -216,24 +248,44 @@ const InputTable = () => {
                   ) => (
                     <TableRow
                       key={row.name}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      sx={{
+                        '&:last-child td, &:last-child th': { border: 0 },
+                      }}
                     >
-                      <TableCell component="th" scope="row">
+                      <TableCell
+                        sx={{
+                          backgroundColor: 'ghostwhite',
+                          borderRight: 'solid grey 5px',
+                        }}
+                        component="th"
+                        scope="row"
+                      >
                         {row.month}
                       </TableCell>
                       {moreDetails && (
                         <>
-                          <TableCell align="right">
-                            £{row.variableTarriff}
-                          </TableCell>
-                          <TableCell align="right">
-                            £ {Math.round(row.priceCap / array.length)}
-                          </TableCell>
-                          <TableCell align="right">
-                            £ {Math.round(uWFixedRate / 12)}
-                          </TableCell>
-                          <TableCell align="right">£{row.priceCap}</TableCell>
-                          <TableCell align="right">£{uWFixedRate}</TableCell>
+                          {perMonth ? (
+                            <>
+                              <TableCell align="right">
+                                £{row.variableTarriff}
+                              </TableCell>
+                              <TableCell align="right">
+                                £ {Math.round(row.priceCap / array.length)}
+                              </TableCell>
+                              <TableCell align="right">
+                                £ {Math.round(uWFixedRate / 12)}
+                              </TableCell>
+                            </>
+                          ) : (
+                            <>
+                              <TableCell align="right">
+                                £{row.priceCap}
+                              </TableCell>
+                              <TableCell align="right">
+                                £{uWFixedRate}
+                              </TableCell>
+                            </>
+                          )}
                           <TableCell align="right">
                             £{Math.round(row.variableTarriffCosts)}
                           </TableCell>
@@ -245,36 +297,57 @@ const InputTable = () => {
                       <TableCell align="right">
                         £{Math.round(row.uWFixedRateCosts)}
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell
+                        sx={{
+                          backgroundColor: row.profit > 0 ? 'green' : 'red',
+                          color: 'white',
+                        }}
+                        align="right"
+                      >
                         £{Math.round(row.profit)}
                       </TableCell>
                     </TableRow>
                   )
                 )}
               <TableRow
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                sx={{
+                  '&:last-child td, &:last-child th': { border: 0 },
+                  'th,td:not(:last-child)': {
+                    color: 'white',
+                    backgroundColor: 'orange',
+                  },
+                }}
               >
                 <TableCell component="th" scope="row">
                   Average
                 </TableCell>
                 {moreDetails && (
                   <>
-                    <TableCell align="right">
-                      £ {Math.round(totalVariableTarriff / rows.length)}
-                    </TableCell>
-                    <TableCell align="right">
-                      £ {Math.round(totalPricecap / rows.length / rows.length)}
-                    </TableCell>
-                    <TableCell align="right">
-                      £ {Math.round(uWFixedRate / 12)}
-                    </TableCell>
-                    <TableCell align="right">
-                      £{Math.round(totalPricecap / rows.length)}
-                    </TableCell>
-                    <TableCell align="right">
-                      £{Math.round(uWFixedRate)}
-                    </TableCell>
-
+                    {perMonth ? (
+                      <>
+                        <TableCell align="right">
+                          £ {Math.round(totalVariableTarriff / rows.length)}
+                        </TableCell>
+                        <TableCell align="right">
+                          £{' '}
+                          {Math.round(
+                            totalPricecap / rows.length / rows.length
+                          )}
+                        </TableCell>
+                        <TableCell align="right">
+                          £ {Math.round(uWFixedRate / 12)}
+                        </TableCell>
+                      </>
+                    ) : (
+                      <>
+                        <TableCell align="right">
+                          £{Math.round(totalPricecap / rows.length)}
+                        </TableCell>
+                        <TableCell align="right">
+                          £{Math.round(uWFixedRate)}
+                        </TableCell>
+                      </>
+                    )}
                     <TableCell align="right">
                       £{Math.round(totalVariableTarriffCosts / rows.length)}
                     </TableCell>
@@ -287,29 +360,54 @@ const InputTable = () => {
                 <TableCell align="right">
                   £{Math.round(totalFixedCosts / rows.length)}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell
+                  sx={{
+                    backgroundColor:
+                      savings / rows.length > 0 ? 'green' : 'red',
+                    color: 'white',
+                  }}
+                  align="right"
+                >
                   £{Math.round(savings / rows.length)}
                 </TableCell>
               </TableRow>
               <TableRow
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                className="text-light"
+                sx={{
+                  '&:last-child td, &:last-child th': { border: 0 },
+                  'th,td:not(:last-child)': {
+                    color: 'white',
+                    backgroundColor: 'red',
+                  },
+                }}
+                className="text-light text-red-500-contras"
               >
-                <TableCell component="th" scope="row">
+                <TableCell
+                  className="text-red-500-contras"
+                  component="th"
+                  scope="row"
+                >
                   Total
                 </TableCell>
                 {moreDetails && (
                   <>
-                    <TableCell align="right">£{totalVariableTarriff}</TableCell>
-                    <TableCell align="right">
-                      £{Math.round(totalPricecap / rows.length)}
-                    </TableCell>
-                    <TableCell align="right">
-                      £{Math.round(uWFixedRate)}
-                    </TableCell>
-                    <TableCell align="right">{}</TableCell>
-                    <TableCell align="right">{}</TableCell>
-
+                    {perMonth ? (
+                      <>
+                        <TableCell align="right">
+                          £{totalVariableTarriff}
+                        </TableCell>
+                        <TableCell align="right">
+                          £{Math.round(totalPricecap / rows.length)}
+                        </TableCell>
+                        <TableCell align="right">
+                          £{Math.round(uWFixedRate)}
+                        </TableCell>
+                      </>
+                    ) : (
+                      <>
+                        <TableCell align="right">{}</TableCell>
+                        <TableCell align="right">{}</TableCell>
+                      </>
+                    )}
                     <TableCell align="right">
                       £{Math.round(totalVariableTarriffCosts)}
                     </TableCell>
@@ -321,7 +419,15 @@ const InputTable = () => {
                 <TableCell align="right">
                   £{Math.round(totalFixedCosts)}
                 </TableCell>
-                <TableCell align="right">£{Math.round(savings)}</TableCell>
+                <TableCell
+                  sx={{
+                    backgroundColor: savings > 0 ? 'green' : 'red',
+                    color: 'white',
+                  }}
+                  align="right"
+                >
+                  £{Math.round(savings)}
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>
