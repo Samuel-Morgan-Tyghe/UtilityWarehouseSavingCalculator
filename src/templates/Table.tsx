@@ -183,7 +183,7 @@ const InputTable = () => {
           </span>
         )}
       </form>
-      <div className={'d-flex w-100 p-5'}>
+      <div className={'d-flex w-100 '}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
