@@ -53,6 +53,25 @@ const MoreInfo = () => {
             Ice/auxilione: Predictions dataset
           </a>
         </li>
+        <li>
+          <a
+            href="https://help.uw.co.uk/article/energy/other_energy_information/energy-bills-support-scheme?utm_source=partnerportal&utm_medium=web&utm_campaign=cap_oct_2022&utm_content=ebss"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Utility Warehouse: £400 Energy Bills Support Scheme
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://uw.co.uk/services/energy/struggling-with-energy-costs?utm_source=partnerportal&utm_medium=web&utm_campaign=cap_oct_2022&utm_content=a2p_find_our_more"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Utility Warehouse: Struggling with energy costs? / Additional
+            Support
+          </a>
+        </li>
       </ul>
     </section>
   );
