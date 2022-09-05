@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import * as React from 'react';
+import { useState, useEffect } from "react";
+import * as React from "react";
 
-import { Switch } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import 'bootstrap/dist/css/bootstrap.css';
+import { Switch } from "@mui/material";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import "bootstrap/dist/css/bootstrap.css";
 
 const InputTable = () => {
   const uWFixedRate = 3650;
@@ -30,8 +30,8 @@ const InputTable = () => {
   const [initCost, setInitCost] = useState<any>(0);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setInitCost(window.localStorage.getItem('cost'));
+    if (typeof window !== "undefined") {
+      setInitCost(window.localStorage.getItem("cost"));
     }
   }, []);
 
@@ -54,18 +54,18 @@ const InputTable = () => {
 
   useEffect(() => {
     const initRows = [
-      createData('September', 213, 1971),
-      createData('October - 80% rise', 384, 3549),
-      createData('November', 384, 3549),
-      createData('December', 384, 3549),
-      createData('January - 52% rise', 582, 5389),
-      createData('Febuary', 582, 5389),
-      createData('March', 582, 5389),
-      createData('April', 715, 6616),
-      createData('May', 715, 6616),
-      createData('June', 715, 6616),
-      createData('July - 11% drop', 637, 5897),
-      createData('August', 637, 5897),
+      createData("September", 213, 1971),
+      createData("October - 80% rise", 384, 3549),
+      createData("November", 384, 3549),
+      createData("December", 384, 3549),
+      createData("January - 52% rise", 582, 5389),
+      createData("Febuary", 582, 5389),
+      createData("March", 582, 5389),
+      createData("April", 715, 6616),
+      createData("May", 715, 6616),
+      createData("June", 715, 6616),
+      createData("July - 11% drop", 637, 5897),
+      createData("August", 637, 5897),
     ];
 
     const vTDenominator = initRows[0]?.variableTarriff ?? 0;
@@ -125,8 +125,8 @@ const InputTable = () => {
   }, 0);
 
   const handleChange = (cost: any) => {
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem('cost', cost as any);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("cost", cost as any);
     }
     setInitCost(cost);
   };
@@ -158,36 +158,38 @@ const InputTable = () => {
         <p>* Note: Prices will fluctuate depending on how much you use *</p>
 
         <span className="d-flex align-baseline items-center align-items-center align-items-center">
-          <p className="m-0">Detailed Table</p>
+          <p className="m-0">
+            {moreDetails ? "Detailed Table" : "Simplified Table"}
+          </p>
           <Switch
             checked={moreDetails}
             onChange={toggleTableDepth}
-            inputProps={{ 'aria-label': 'controlled' }}
+            inputProps={{ "aria-label": "controlled" }}
           />
         </span>
         {moreDetails && (
           <span className="d-flex align-baseline items-center align-items-center align-items-center">
-            <p className="m-0">{perMonth ? 'Per Month' : 'Per Year'}</p>
+            <p className="m-0">{perMonth ? "Per Month" : "Per Year"}</p>
             <Switch
               checked={perMonth}
               onChange={() => setPerMonth(!perMonth)}
-              inputProps={{ 'aria-label': 'controlled' }}
+              inputProps={{ "aria-label": "controlled" }}
             />
           </span>
         )}
       </form>
-      <div className={'d-flex w-100 p-5'}>
+      <div className={"d-flex w-100 p-5"}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow
                 sx={{
-                  '&:last-child td, &:last-child th': {
-                    backgroundColor: 'ghostwhite',
+                  "&:last-child td, &:last-child th": {
+                    backgroundColor: "ghostwhite",
                   },
                 }}
               >
-                <TableCell sx={{ backgroundColor: 'ghostwhite' }}>
+                <TableCell sx={{ backgroundColor: "ghostwhite" }}>
                   Month
                 </TableCell>
                 {moreDetails && (
@@ -249,13 +251,13 @@ const InputTable = () => {
                     <TableRow
                       key={row.name}
                       sx={{
-                        '&:last-child td, &:last-child th': { border: 0 },
+                        "&:last-child td, &:last-child th": { border: 0 },
                       }}
                     >
                       <TableCell
                         sx={{
-                          backgroundColor: 'ghostwhite',
-                          borderRight: 'solid grey 5px',
+                          backgroundColor: "ghostwhite",
+                          borderRight: "solid grey 5px",
                         }}
                         component="th"
                         scope="row"
@@ -299,8 +301,8 @@ const InputTable = () => {
                       </TableCell>
                       <TableCell
                         sx={{
-                          backgroundColor: row.profit > 0 ? 'green' : 'red',
-                          color: 'white',
+                          backgroundColor: row.profit > 0 ? "green" : "red",
+                          color: "white",
                         }}
                         align="right"
                       >
@@ -311,10 +313,10 @@ const InputTable = () => {
                 )}
               <TableRow
                 sx={{
-                  '&:last-child td, &:last-child th': { border: 0 },
-                  'th,td:not(:last-child)': {
-                    color: 'white',
-                    backgroundColor: 'orange',
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  "th,td:not(:last-child)": {
+                    color: "white",
+                    backgroundColor: "orange",
                   },
                 }}
               >
@@ -329,7 +331,7 @@ const InputTable = () => {
                           £ {Math.round(totalVariableTarriff / rows.length)}
                         </TableCell>
                         <TableCell align="right">
-                          £{' '}
+                          £{" "}
                           {Math.round(
                             totalPricecap / rows.length / rows.length
                           )}
@@ -363,8 +365,8 @@ const InputTable = () => {
                 <TableCell
                   sx={{
                     backgroundColor:
-                      savings / rows.length > 0 ? 'green' : 'red',
-                    color: 'white',
+                      savings / rows.length > 0 ? "green" : "red",
+                    color: "white",
                   }}
                   align="right"
                 >
@@ -373,10 +375,10 @@ const InputTable = () => {
               </TableRow>
               <TableRow
                 sx={{
-                  '&:last-child td, &:last-child th': { border: 0 },
-                  'th,td:not(:last-child)': {
-                    color: 'white',
-                    backgroundColor: 'red',
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  "th,td:not(:last-child)": {
+                    color: "white",
+                    backgroundColor: "red",
                   },
                 }}
                 className="text-light text-red-500-contras"
@@ -421,8 +423,8 @@ const InputTable = () => {
                 </TableCell>
                 <TableCell
                   sx={{
-                    backgroundColor: savings > 0 ? 'green' : 'red',
-                    color: 'white',
+                    backgroundColor: savings > 0 ? "green" : "red",
+                    color: "white",
                   }}
                   align="right"
                 >
