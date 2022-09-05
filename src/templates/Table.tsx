@@ -1,15 +1,18 @@
-import { useState, useEffect } from "react";
-import * as React from "react";
+import { useState, useEffect } from 'react';
+import * as React from 'react';
 
-import { Switch } from "@mui/material";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import "bootstrap/dist/css/bootstrap.css";
+import { Switch } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import 'bootstrap/dist/css/bootstrap.css';
+import CountUp from 'react-countup';
 
 const InputTable = () => {
   const uWFixedRate = 3650;
@@ -30,8 +33,8 @@ const InputTable = () => {
   const [initCost, setInitCost] = useState<any>(0);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setInitCost(window.localStorage.getItem("cost"));
+    if (typeof window !== 'undefined') {
+      setInitCost(window.localStorage.getItem('cost'));
     }
   }, []);
 
@@ -54,18 +57,18 @@ const InputTable = () => {
 
   useEffect(() => {
     const initRows = [
-      createData("September", 213, 1971),
-      createData("October - 80% rise", 384, 3549),
-      createData("November", 384, 3549),
-      createData("December", 384, 3549),
-      createData("January - 52% rise", 582, 5389),
-      createData("Febuary", 582, 5389),
-      createData("March", 582, 5389),
-      createData("April", 715, 6616),
-      createData("May", 715, 6616),
-      createData("June", 715, 6616),
-      createData("July - 11% drop", 637, 5897),
-      createData("August", 637, 5897),
+      createData('September', 213, 1971),
+      createData('October - 80% rise', 384, 3549),
+      createData('November', 384, 3549),
+      createData('December', 384, 3549),
+      createData('January - 52% rise', 582, 5389),
+      createData('Febuary', 582, 5389),
+      createData('March', 582, 5389),
+      createData('April', 715, 6616),
+      createData('May', 715, 6616),
+      createData('June', 715, 6616),
+      createData('July - 11% drop', 637, 5897),
+      createData('August', 637, 5897),
     ];
 
     const vTDenominator = initRows[0]?.variableTarriff ?? 0;
@@ -125,8 +128,8 @@ const InputTable = () => {
   }, 0);
 
   const handleChange = (cost: any) => {
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem("cost", cost as any);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('cost', cost as any);
     }
     setInitCost(cost);
   };
@@ -151,7 +154,9 @@ const InputTable = () => {
             value={initCost}
             placeholder="Calculations start at August
             Rate"
-            onChange={(e) => handleChange(e.target.value as any)}
+            onChange={(e) =>
+              handleChange((e.target.value as any) > 0 && e.target.value)
+            }
           ></input>
         </span>
         <p>Calculations start at August Rate and assume consistent usage</p>
@@ -159,37 +164,37 @@ const InputTable = () => {
 
         <span className="d-flex align-baseline items-center align-items-center align-items-center">
           <p className="m-0">
-            {moreDetails ? "Detailed Table" : "Simplified Table"}
+            {moreDetails ? 'Detailed Table' : 'Simplified Table'}
           </p>
           <Switch
             checked={moreDetails}
             onChange={toggleTableDepth}
-            inputProps={{ "aria-label": "controlled" }}
+            inputProps={{ 'aria-label': 'controlled' }}
           />
         </span>
         {moreDetails && (
           <span className="d-flex align-baseline items-center align-items-center align-items-center">
-            <p className="m-0">{perMonth ? "Per Month" : "Per Year"}</p>
+            <p className="m-0">{perMonth ? 'Per Month' : 'Per Year'}</p>
             <Switch
               checked={perMonth}
               onChange={() => setPerMonth(!perMonth)}
-              inputProps={{ "aria-label": "controlled" }}
+              inputProps={{ 'aria-label': 'controlled' }}
             />
           </span>
         )}
       </form>
-      <div className={"d-flex w-100 p-5"}>
+      <div className={'d-flex w-100 p-5'}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow
                 sx={{
-                  "&:last-child td, &:last-child th": {
-                    backgroundColor: "ghostwhite",
+                  '&:last-child td, &:last-child th': {
+                    backgroundColor: 'ghostwhite',
                   },
                 }}
               >
-                <TableCell sx={{ backgroundColor: "ghostwhite" }}>
+                <TableCell sx={{ backgroundColor: 'ghostwhite' }}>
                   Month
                 </TableCell>
                 {moreDetails && (
@@ -251,13 +256,13 @@ const InputTable = () => {
                     <TableRow
                       key={row.name}
                       sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
+                        '&:last-child td, &:last-child th': { border: 0 },
                       }}
                     >
                       <TableCell
                         sx={{
-                          backgroundColor: "ghostwhite",
-                          borderRight: "solid grey 5px",
+                          backgroundColor: 'ghostwhite',
+                          borderRight: 'solid grey 5px',
                         }}
                         component="th"
                         scope="row"
@@ -284,39 +289,60 @@ const InputTable = () => {
                                 £{row.priceCap}
                               </TableCell>
                               <TableCell align="right">
-                                £{uWFixedRate}
+                                £
+                                <CountUp end={uWFixedRate} duration={0.33} />
                               </TableCell>
                             </>
                           )}
                           <TableCell align="right">
-                            £{Math.round(row.variableTarriffCosts)}
+                            £
+                            <CountUp
+                              end={Math.round(row.variableTarriffCosts)}
+                              duration={0.33}
+                            />
                           </TableCell>
                         </>
                       )}
                       <TableCell align="right">
-                        £{Math.round(row.priceCapCosts)}
+                        £
+                        <CountUp
+                          end={Math.round(row.priceCapCosts)}
+                          duration={0.33}
+                        />
                       </TableCell>
                       <TableCell align="right">
-                        £{Math.round(row.uWFixedRateCosts)}
+                        £
+                        <CountUp
+                          end={Math.round(row.uWFixedRateCosts)}
+                          duration={0.33}
+                        />
                       </TableCell>
                       <TableCell
+                        /* eslint-disable */
                         sx={{
-                          backgroundColor: row.profit > 0 ? "green" : "red",
-                          color: "white",
+                          backgroundColor:
+                            row.profit > 0
+                              ? "green"
+                              : row.profit === 0
+                              ? ""
+                              : "red",
+                          color: row.profit !== 0 ? "white" : "",
                         }}
+                        /* eslint-enable */
                         align="right"
                       >
-                        £{Math.round(row.profit)}
+                        £
+                        <CountUp end={Math.round(row.profit)} duration={0.33} />
                       </TableCell>
                     </TableRow>
                   )
                 )}
               <TableRow
                 sx={{
-                  "&:last-child td, &:last-child th": { border: 0 },
-                  "th,td:not(:last-child)": {
-                    color: "white",
-                    backgroundColor: "orange",
+                  '&:last-child td, &:last-child th': { border: 0 },
+                  'th,td:not(:last-child)': {
+                    color: 'white',
+                    backgroundColor: 'orange',
                   },
                 }}
               >
@@ -331,7 +357,7 @@ const InputTable = () => {
                           £ {Math.round(totalVariableTarriff / rows.length)}
                         </TableCell>
                         <TableCell align="right">
-                          £{" "}
+                          £{' '}
                           {Math.round(
                             totalPricecap / rows.length / rows.length
                           )}
@@ -363,11 +389,18 @@ const InputTable = () => {
                   £{Math.round(totalFixedCosts / rows.length)}
                 </TableCell>
                 <TableCell
+                  /* eslint-disable */
                   sx={{
                     backgroundColor:
-                      savings / rows.length > 0 ? "green" : "red",
+                      savings / rows.length >= 0
+                        ? savings / rows.length !== 0
+                          ? "green"
+                          : "orange"
+                        : "red",
                     color: "white",
                   }}
+                  /* eslint-enable */
+
                   align="right"
                 >
                   £{Math.round(savings / rows.length)}
@@ -375,10 +408,10 @@ const InputTable = () => {
               </TableRow>
               <TableRow
                 sx={{
-                  "&:last-child td, &:last-child th": { border: 0 },
-                  "th,td:not(:last-child)": {
-                    color: "white",
-                    backgroundColor: "red",
+                  '&:last-child td, &:last-child th': { border: 0 },
+                  'th,td:not(:last-child)': {
+                    color: 'white',
+                    backgroundColor: 'red',
                   },
                 }}
                 className="text-light text-red-500-contras"
@@ -411,30 +444,66 @@ const InputTable = () => {
                       </>
                     )}
                     <TableCell align="right">
-                      £{Math.round(totalVariableTarriffCosts)}
+                      £
+                      <CountUp
+                        end={Math.round(totalVariableTarriffCosts)}
+                        duration={0.33}
+                      />
                     </TableCell>
                   </>
                 )}
                 <TableCell align="right">
-                  £{Math.round(totalPricecapCosts)}
+                  £
+                  <CountUp
+                    end={Math.round(totalPricecapCosts)}
+                    duration={0.33}
+                  />
                 </TableCell>
                 <TableCell align="right">
-                  £{Math.round(totalFixedCosts)}
+                  £<CountUp end={Math.round(totalFixedCosts)} duration={0.33} />
                 </TableCell>
                 <TableCell
                   sx={{
-                    backgroundColor: savings > 0 ? "green" : "red",
-                    color: "white",
+                    backgroundColor: savings > 0 ? 'green' : 'red',
+                    color: 'white',
                   }}
                   align="right"
                 >
-                  £{Math.round(savings)}
+                  £<CountUp end={Math.round(savings)} duration={0.33} />
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
       </div>
+      <a
+        href="https://uw.partners/samuel.morgan1/join"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-decoration-none bg-white text-slate-600"
+      >
+        <section className="  d-flex flex-col align-items-center padding bg-primary-200 rounded rounded-lg p-4 m-4">
+          <article className=" text-center text-decoration-none">
+            <h2 className="text-decoration-none">
+              You could save
+              <span className="bold"> £ {Math.round(savings)}</span>
+            </h2>
+            <h3 className="text-decoration-none">Join the Utility Warehouse</h3>
+            <p className="text-decoration-none">
+              3 service subscriptions required for the 12 month Fixed Tarriff
+            </p>
+            <p>
+              Use my referral code 8436166 when you sign up to help keep my
+              energy bills low
+            </p>
+            <Box sx={{ '& button': { m: 2 } }}>
+              <Button variant="outlined" size="large">
+                Join Here
+              </Button>
+            </Box>
+          </article>
+        </section>
+      </a>
     </div>
   );
 };
