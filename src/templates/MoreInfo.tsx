@@ -75,6 +75,24 @@ const MoreInfo = () => {
             Support
           </a>
         </li>
+        <li>
+          <a
+            href="https://www.goodto.com/money/what-is-the-energy-price-cap-648782"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            goodto: What is the Energy Price Cap?
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.goodto.com/money/will-energy-prices-go-down-658893"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            goodto: Will energy prices go down in 2022?
+          </a>
+        </li>
       </ul>
     </section>
   );

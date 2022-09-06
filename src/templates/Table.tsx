@@ -39,6 +39,9 @@ const InputTable = () => {
   // const uWFixedRateGas = { unitRate: 16.627, standingCharge: 17.36 };
 
   const [initCost, setInitCost] = useState<any>(0);
+  const [moreDetails, setMoreDetails] = useState<boolean>(false);
+  const [perMonth, setPerMonth] = useState<boolean>(true);
+  const [useOffGem, setUseOffGem] = useState<boolean>(true);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -50,7 +53,8 @@ const InputTable = () => {
   function createData(
     month: string,
     variableTarriff: number,
-    priceCap: number
+    priceCap: number,
+    auxPredictions: number
   ) {
     return {
       month,
@@ -60,41 +64,54 @@ const InputTable = () => {
       priceCapCosts: 0,
       uWFixedRateCosts: 0,
       profit: 0,
+      auxPredictions,
+      increaseRate: 0,
     };
   }
 
   useEffect(() => {
     const initRows = [
-      createData('September', 213, 1971),
-      createData('October - 80% rise', 384, 3549),
-      createData('November', 384, 3549),
-      createData('December', 384, 3549),
-      createData('January - 52% rise', 582, 5389),
-      createData('Febuary', 582, 5389),
-      createData('March', 582, 5389),
-      createData('April', 715, 6616),
-      createData('May', 715, 6616),
-      createData('June', 715, 6616),
-      createData('July - 11% drop', 637, 5897),
-      createData('August', 637, 5897),
+      createData('September', 213, 1971, 1971),
+      createData('October', 384, 3549, 3550),
+      createData('November', 384, 3549, 3550),
+      createData('December', 384, 3549, 3550),
+      createData('January', 582, 5389, 5405),
+      createData('Febuary', 582, 5389, 5405),
+      createData('March', 582, 5389, 5405),
+      createData('April', 715, 6616, 7263),
+      createData('May', 715, 6616, 7623),
+      createData('June', 715, 6616, 7263),
+      createData('July', 637, 5897, 6485),
+      createData('August', 637, 5897, 6485),
     ];
 
     const vTDenominator = initRows[0]?.variableTarriff ?? 0;
+    const auxDenominator = initRows[0]?.auxPredictions ?? 0;
     const pcDenominator = initRows[0]?.priceCap ?? 0;
     const updatedRows = initRows.map(
-      (row: { variableTarriff: number; priceCap: number }) => ({
+      (row: {
+        variableTarriff: number;
+        priceCap: number;
+        auxPredictions: number;
+      }) => ({
         ...row,
+        auxPredictionsCosts: initCost * (row.auxPredictions / auxDenominator),
         variableTarriffCosts: initCost * (row.variableTarriff / vTDenominator),
         uWFixedRateCosts: initCost * (uWFixedRate / 12 / vTDenominator),
         priceCapCosts: initCost * (row.priceCap / pcDenominator),
+        increaseRate: useOffGem
+          ? row.variableTarriff / vTDenominator
+          : row.auxPredictions / auxDenominator,
         profit:
-          initCost * (row.variableTarriff / vTDenominator) -
+          (useOffGem
+            ? initCost * (row.variableTarriff / vTDenominator)
+            : initCost * (row.auxPredictions / auxDenominator)) -
           initCost * (uWFixedRate / 12 / vTDenominator),
       })
     );
 
     setRows(updatedRows);
-  }, [initCost]);
+  }, [initCost, useOffGem]);
 
   const totalVariableTarriff = rows.reduce(function (
     acc: any,
@@ -117,7 +134,14 @@ const InputTable = () => {
     return acc + obj.priceCapCosts;
   },
   0);
-  const totalVariableTarriffCosts = rows.reduce(function (
+  // const totalVariableTarriffCosts = rows.reduce(function (
+  //   acc: any,
+  //   obj: { variableTarriffCosts: any }
+  // ) {
+  //   return acc + obj.variableTarriffCosts;
+  // },
+  // 0);
+  const totalAuxCosts = rows.reduce(function (
     acc: any,
     obj: { variableTarriffCosts: any }
   ) {
@@ -141,8 +165,7 @@ const InputTable = () => {
     }
     setInitCost(cost);
   };
-  const [moreDetails, setMoreDetails] = useState<boolean>(false);
-  const [perMonth, setPerMonth] = useState<boolean>(true);
+
   // const toggleTableDepth = () => {
   //   setMoreDetails(!moreDetails);
   // };
@@ -245,6 +268,29 @@ const InputTable = () => {
               </p>
             </span>
           )}
+          <span className="d-flex align-baseline items-center align-items-center align-items-center ">
+            <p
+              className={`m-0 cursor-pointer px-2 py-1  slate-900 	border-blue-600 border-y-2 border-l-2  rounded-l ${
+                useOffGem ? '' : 'bg-blue-600 text-white'
+              }`}
+              onClick={() => setUseOffGem(false)}
+            >
+              Use Auxilione Predictions
+            </p>
+            {/* <Switch
+                checked={perMonth}
+                onChange={() => setPerMonth(!perMonth)}
+                inputProps={{ "aria-label": "controlled" }}
+              />{" "} */}
+            <p
+              className={`m-0 cursor-pointer  px-2 py-1  slate-900 	border-blue-600 border-y-2 border-r-2   rounded-r ${
+                !useOffGem ? '' : 'bg-blue-600 text-white'
+              }`}
+              onClick={() => setUseOffGem(true)}
+            >
+              Use Offgem Predictions
+            </p>
+          </span>
           <Box
             sx={{ alignItems: 'center', maxWidth: '450px' }}
             className="d-flex flex col px-4  gap-4 ml-auto  "
@@ -307,14 +353,17 @@ const InputTable = () => {
                         </TableCell>
                       </>
                     )}
-                    <TableCell align="right">
-                      Utility Warehouse Predicted rate Monthly Cost *
-                    </TableCell>
                   </>
                 )}
-                <TableCell align="right">
-                  Offgem Predicted Price Cap Monthly Rate *
-                </TableCell>
+                {useOffGem ? (
+                  <TableCell align="right">
+                    Offgem Predicted Price Cap Monthly Rate *
+                  </TableCell>
+                ) : (
+                  <TableCell align="right">
+                    Auxilione Predicted rate Monthly Cost *
+                  </TableCell>
+                )}
                 <TableCell align="right">
                   Utility Warehouse fixed Year rate Monthly Cost *
                 </TableCell>
@@ -328,12 +377,14 @@ const InputTable = () => {
                     row: {
                       name: any;
                       month: any;
+                      increaseRate: number;
                       variableTarriff: any;
                       priceCap: number;
                       variableTarriffCosts: number;
                       priceCapCosts: number;
                       uWFixedRateCosts: number;
                       profit: number;
+                      auxPredictionsCosts: number;
                     },
                     _undefined: any,
                     array: string | any[]
@@ -353,6 +404,10 @@ const InputTable = () => {
                         scope="row"
                       >
                         {row.month}
+                        {row.increaseRate > 0 &&
+                          ` + ${Math.round(row.increaseRate * 100 - 100)}%`}
+                        {row.increaseRate < 0 &&
+                          ` - ${Math.round(row.increaseRate * 100 - 100)}%`}
                       </TableCell>
                       {moreDetails && (
                         <>
@@ -378,22 +433,26 @@ const InputTable = () => {
                               </TableCell>
                             </>
                           )}
-                          <TableCell align="right">
-                            £
-                            <CountUp
-                              end={Math.round(row.variableTarriffCosts)}
-                              duration={0.33}
-                            />
-                          </TableCell>
                         </>
                       )}
-                      <TableCell align="right">
-                        £
-                        <CountUp
-                          end={Math.round(row.priceCapCosts)}
-                          duration={0.33}
-                        />
-                      </TableCell>
+                      {useOffGem ? (
+                        <TableCell align="right">
+                          £
+                          <CountUp
+                            end={Math.round(row.priceCapCosts)}
+                            duration={0.33}
+                          />{' '}
+                        </TableCell>
+                      ) : (
+                        <TableCell align="right">
+                          £
+                          <CountUp
+                            end={Math.round(row.auxPredictionsCosts)}
+                            duration={0.33}
+                          />
+                        </TableCell>
+                      )}
+
                       <TableCell align="right">
                         £
                         <CountUp
@@ -463,15 +522,18 @@ const InputTable = () => {
                         </TableCell>
                       </>
                     )}
-                    <TableCell align="right">
-                      £{Math.round(totalVariableTarriffCosts / rows.length)}
-                    </TableCell>
                   </>
                 )}
 
-                <TableCell align="right">
-                  £{Math.round(totalPricecapCosts / rows.length)}
-                </TableCell>
+                {useOffGem ? (
+                  <TableCell align="right">
+                    £{Math.round(totalPricecapCosts / rows.length)}
+                  </TableCell>
+                ) : (
+                  <TableCell align="right">
+                    £{Math.round(totalAuxCosts / rows.length)}
+                  </TableCell>
+                )}
                 <TableCell align="right">
                   £{Math.round(totalFixedCosts / rows.length)}
                 </TableCell>
@@ -533,22 +595,22 @@ const InputTable = () => {
                         <TableCell align="right">{}</TableCell>
                       </>
                     )}
-                    <TableCell align="right">
-                      £
-                      <CountUp
-                        end={Math.round(totalVariableTarriffCosts)}
-                        duration={0.33}
-                      />
-                    </TableCell>
                   </>
                 )}
-                <TableCell align="right">
-                  £
-                  <CountUp
-                    end={Math.round(totalPricecapCosts)}
-                    duration={0.33}
-                  />
-                </TableCell>
+                {useOffGem ? (
+                  <TableCell align="right">
+                    £
+                    <CountUp
+                      end={Math.round(totalPricecapCosts)}
+                      duration={0.33}
+                    />
+                  </TableCell>
+                ) : (
+                  <TableCell align="right">
+                    £
+                    <CountUp end={Math.round(totalAuxCosts)} duration={0.33} />
+                  </TableCell>
+                )}
                 <TableCell align="right">
                   £<CountUp end={Math.round(totalFixedCosts)} duration={0.33} />
                 </TableCell>
