@@ -2,8 +2,11 @@ import React from 'react';
 
 const MoreInfo = () => {
   return (
-    <section>
-      <ul>
+    <section className=" p-4">
+      <ul
+        className="d-flex flex-col gap-2
+      "
+      >
         <h2>More Information</h2>
         <li>
           <a

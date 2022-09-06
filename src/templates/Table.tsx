@@ -1,20 +1,28 @@
-import { useState, useEffect } from "react";
-import * as React from "react";
+import { useState, useEffect } from 'react';
+import * as React from 'react';
 
-import { Switch } from "@mui/material";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import "bootstrap/dist/css/bootstrap.css";
-import CountUp from "react-countup";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import 'bootstrap/dist/css/bootstrap.css';
+import CountUp from 'react-countup';
 
 const InputTable = () => {
+  const [width, setWidth] = useState<number>(0);
+  const updateDimensions = () => {
+    setWidth(window.innerWidth);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
   const uWFixedRate = 3650;
 
   // uWFixedRate = 4212;
@@ -33,8 +41,8 @@ const InputTable = () => {
   const [initCost, setInitCost] = useState<any>(0);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setInitCost(window.localStorage.getItem("cost"));
+    if (typeof window !== 'undefined') {
+      setInitCost(window.localStorage.getItem('cost'));
     }
   }, []);
 
@@ -57,18 +65,18 @@ const InputTable = () => {
 
   useEffect(() => {
     const initRows = [
-      createData("September", 213, 1971),
-      createData("October - 80% rise", 384, 3549),
-      createData("November", 384, 3549),
-      createData("December", 384, 3549),
-      createData("January - 52% rise", 582, 5389),
-      createData("Febuary", 582, 5389),
-      createData("March", 582, 5389),
-      createData("April", 715, 6616),
-      createData("May", 715, 6616),
-      createData("June", 715, 6616),
-      createData("July - 11% drop", 637, 5897),
-      createData("August", 637, 5897),
+      createData('September', 213, 1971),
+      createData('October - 80% rise', 384, 3549),
+      createData('November', 384, 3549),
+      createData('December', 384, 3549),
+      createData('January - 52% rise', 582, 5389),
+      createData('Febuary', 582, 5389),
+      createData('March', 582, 5389),
+      createData('April', 715, 6616),
+      createData('May', 715, 6616),
+      createData('June', 715, 6616),
+      createData('July - 11% drop', 637, 5897),
+      createData('August', 637, 5897),
     ];
 
     const vTDenominator = initRows[0]?.variableTarriff ?? 0;
@@ -128,73 +136,150 @@ const InputTable = () => {
   }, 0);
 
   const handleChange = (cost: any) => {
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem("cost", cost as any);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('cost', cost as any);
     }
     setInitCost(cost);
   };
   const [moreDetails, setMoreDetails] = useState<boolean>(false);
   const [perMonth, setPerMonth] = useState<boolean>(true);
-  const toggleTableDepth = () => {
-    setMoreDetails(!moreDetails);
-  };
+  // const toggleTableDepth = () => {
+  //   setMoreDetails(!moreDetails);
+  // };
   return (
     <div className="App">
-      <form className="d-flex flex-col align-items-center">
-        <h1>What do you pay on average for Electricity + Gas per month?</h1>
-        <p>What did you Pay for the month of August?</p>
-        <span
-          className="d-flex align-baseline items-center align-items-center
-        "
+      <Box
+        sx={{
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          background:
+            'linear-gradient(150deg, rgba(171,171,252,1) 0%, rgba(182,218,232,1) 100%)',
+        }}
+        className="d-flex flex-col align-items-center bg-blue-600 text-white"
+      >
+        <Box
+          sx={{
+            background:
+              'linear-gradient(292deg, rgba(171,171,252,1) 0%, rgba(105,164,187,1) 100%)',
+            boxShadow: ' rgba(149, 157, 165, 0.2) 0px 8px 24px;',
+          }}
+          className="rounded p-12"
         >
-          <p className="m-0">£</p>
-          <input
-            className="w-100 p-2 m-2"
-            type="number"
-            value={initCost}
-            placeholder="Calculations start at August
+          <h1>What do you pay on average for Electricity + Gas per month?</h1>
+          <p>What did you Pay for the month of August?</p>
+          <span
+            className="d-flex align-baseline items-center align-items-center
+        "
+          >
+            <p className="m-0">£</p>
+            <input
+              className="w-100 p-2 m-2 outline-none text-black
+              "
+              type="number"
+              value={initCost}
+              placeholder="Calculations start at August
             Rate"
-            onChange={(e) =>
-              handleChange((e.target.value as any) > 0 && e.target.value)
-            }
-          ></input>
-        </span>
-        <p>Calculations start at August Rate and assume consistent usage</p>
-        <p>* Note: Prices will fluctuate depending on how much you use *</p>
-
-        <span className="d-flex align-baseline items-center align-items-center align-items-center">
-          <p className="m-0">
-            {moreDetails ? "Detailed Table" : "Simplified Table"}
-          </p>
-          <Switch
-            checked={moreDetails}
-            onChange={toggleTableDepth}
-            inputProps={{ "aria-label": "controlled" }}
-          />
-        </span>
-        {moreDetails && (
-          <span className="d-flex align-baseline items-center align-items-center align-items-center">
-            <p className="m-0">{perMonth ? "Per Month" : "Per Year"}</p>
-            <Switch
-              checked={perMonth}
-              onChange={() => setPerMonth(!perMonth)}
-              inputProps={{ "aria-label": "controlled" }}
-            />
+              onChange={(e) =>
+                handleChange((e.target.value as any) > 0 && e.target.value)
+              }
+            ></input>
           </span>
-        )}
-      </form>
-      <div className={"d-flex w-100 "}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <p>Calculations start at August Rate and assume consistent usage</p>
+          <p>* Note: Prices will fluctuate depending on how much you use *</p>
+        </Box>
+      </Box>
+
+      <Box
+        sx={{}}
+        className={`d-flex flex-col w-100 px-6 my-12 ${
+          width > 400 ? 'px-12' : ''
+        }`}
+      >
+        <div className="d-flex flex-row w-100 gap-8 ">
+          <span className="d-flex flex-row py-4">
+            <p
+              className={`m-0 cursor-pointer px-2 py-1  slate-900 	border-blue-600 border-y-2 border-l-2  rounded-l ${
+                moreDetails ? '' : 'bg-blue-600 text-white'
+              }`}
+              onClick={() => setMoreDetails(false)}
+            >
+              Simplified Table
+            </p>
+            {/* <Switch
+              checked={moreDetails}
+              onChange={toggleTableDepth}
+              inputProps={{ "aria-label": "controlled" }}
+            />{" "} */}
+            <p
+              className={`m-0 cursor-pointer  px-2 py-1  slate-900 	border-blue-600 border-y-2 border-r-2   rounded-r ${
+                !moreDetails ? '' : 'bg-blue-600 text-white'
+              }`}
+              onClick={() => setMoreDetails(true)}
+            >
+              Detailed Table
+            </p>
+          </span>
+          {moreDetails && (
+            <span className="d-flex align-baseline items-center align-items-center align-items-center ">
+              <p
+                className={`m-0 cursor-pointer px-2 py-1  slate-900 	border-blue-600 border-y-2 border-l-2  rounded-l ${
+                  perMonth ? '' : 'bg-blue-600 text-white'
+                }`}
+                onClick={() => setPerMonth(false)}
+              >
+                Per year
+              </p>
+              {/* <Switch
+                checked={perMonth}
+                onChange={() => setPerMonth(!perMonth)}
+                inputProps={{ "aria-label": "controlled" }}
+              />{" "} */}
+              <p
+                className={`m-0 cursor-pointer  px-2 py-1  slate-900 	border-blue-600 border-y-2 border-r-2   rounded-r ${
+                  !perMonth ? '' : 'bg-blue-600 text-white'
+                }`}
+                onClick={() => setPerMonth(true)}
+              >
+                Per Month
+              </p>
+            </span>
+          )}
+          <Box
+            sx={{ alignItems: 'center', maxWidth: '450px' }}
+            className="d-flex flex col px-4  gap-4 ml-auto  "
+          >
+            <span className="d-flex flex col border-blue-600 border-2 rounded p-2 bg-white">
+              £
+              <input
+                className="w-100 border-0 outline-0"
+                type="number"
+                value={initCost}
+                placeholder="Calculations start at August
+          Rate"
+                onChange={(e) =>
+                  handleChange((e.target.value as any) > 0 && e.target.value)
+                }
+              ></input>
+            </span>
+          </Box>
+        </div>
+        <TableContainer sx={{}} component={Paper} className="mb-12 mt-2">
+          <Table
+            sx={{
+              minWidth: 650,
+            }}
+            aria-label="simple table"
+          >
             <TableHead>
               <TableRow
                 sx={{
-                  "&:last-child td, &:last-child th": {
-                    backgroundColor: "ghostwhite",
+                  '&:last-child td, &:last-child th': {
+                    backgroundColor: 'ghostwhite',
                   },
                 }}
               >
-                <TableCell sx={{ backgroundColor: "ghostwhite" }}>
+                <TableCell sx={{ backgroundColor: 'ghostwhite' }}>
                   Month
                 </TableCell>
                 {moreDetails && (
@@ -256,13 +341,13 @@ const InputTable = () => {
                     <TableRow
                       key={row.name}
                       sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
+                        '&:last-child td, &:last-child th': { border: 0 },
                       }}
                     >
                       <TableCell
                         sx={{
-                          backgroundColor: "ghostwhite",
-                          borderRight: "solid grey 5px",
+                          backgroundColor: 'ghostwhite',
+                          borderRight: 'solid grey 5px',
                         }}
                         component="th"
                         scope="row"
@@ -289,8 +374,7 @@ const InputTable = () => {
                                 £{row.priceCap}
                               </TableCell>
                               <TableCell align="right">
-                                £
-                                <CountUp end={uWFixedRate} duration={0.33} />
+                                £{uWFixedRate}
                               </TableCell>
                             </>
                           )}
@@ -322,10 +406,10 @@ const InputTable = () => {
                         sx={{
                           backgroundColor:
                             row.profit > 0
-                              ? "green"
+                              ? "#6abc85"
                               : row.profit === 0
                               ? ""
-                              : "red",
+                              : "#ec7979",
                           color: row.profit !== 0 ? "white" : "",
                           fontWeight: "bold",
                         }}
@@ -340,12 +424,12 @@ const InputTable = () => {
                 )}
               <TableRow
                 sx={{
-                  "&:last-child td, &:last-child th": { border: 0 },
-                  "th,td:not(:last-child)": {
-                    color: "white",
-                    fontWeight: "bold",
+                  '&:last-child td, &:last-child th': { border: 0 },
+                  'th,td:not(:last-child)': {
+                    color: 'white',
+                    fontWeight: 'bold',
 
-                    backgroundColor: "orange",
+                    backgroundColor: '#f2b74c',
                   },
                 }}
               >
@@ -360,7 +444,7 @@ const InputTable = () => {
                           £ {Math.round(totalVariableTarriff / rows.length)}
                         </TableCell>
                         <TableCell align="right">
-                          £{" "}
+                          £{' '}
                           {Math.round(
                             totalPricecap / rows.length / rows.length
                           )}
@@ -397,8 +481,8 @@ const InputTable = () => {
                     backgroundColor:
                       savings / rows.length >= 0
                         ? savings / rows.length !== 0
-                          ? "green"
-                          : "orange"
+                          ? "#6abc85"
+                          : "#f2b74c"
                         : "red",
                     color: "white",
                     fontWeight: "bold",
@@ -412,17 +496,18 @@ const InputTable = () => {
               </TableRow>
               <TableRow
                 sx={{
-                  "&:last-child td, &:last-child th": { border: 0 },
-                  "th,td:not(:last-child)": {
-                    color: "white",
-                    backgroundColor: "red",
-                    fontWeight: "bold",
+                  '&:last-child td, &:last-child th': { border: 0 },
+                  'th,td:not(:last-child)': {
+                    color: 'white',
+                    backgroundColor: '#ec7979',
+                    fontWeight: 'bold',
                   },
                 }}
                 className="text-light text-red-500-contras"
               >
                 <TableCell
-                  className="text-red-500-contras"
+                  sx={{ color: '#ec7979' }}
+                  className=""
                   component="th"
                   scope="row"
                 >
@@ -469,9 +554,9 @@ const InputTable = () => {
                 </TableCell>
                 <TableCell
                   sx={{
-                    backgroundColor: savings > 0 ? "green" : "red",
-                    color: "white",
-                    fontWeight: "bold",
+                    backgroundColor: savings > 0 ? '#6abc85' : '#ec7979',
+                    color: 'white',
+                    fontWeight: 'bold',
                   }}
                   align="right"
                 >
@@ -481,35 +566,64 @@ const InputTable = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </div>
-      <a
-        href="https://uw.partners/samuel.morgan1/join"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-decoration-none bg-white text-slate-600"
+      </Box>
+      <Box
+        sx={{
+          height: '100vh',
+          background:
+            'linear-gradient(292deg, rgba(171,171,252,1) 0%, rgba(105,164,187,1) 100%)',
+          boxShadow: ' rgba(149, 157, 165, 0.2) 0px 8px 24px;',
+        }}
+        className="d-flex align-items-center justify-center"
       >
-        <section className="  d-flex flex-col align-items-center padding bg-primary-200 rounded rounded-lg p-4 m-4">
-          <article className=" text-center text-decoration-none">
-            <h2 className="text-decoration-none">
-              You could save
-              <span className="bold"> £ {Math.round(savings)}</span>
-            </h2>
-            <h3 className="text-decoration-none">Join the Utility Warehouse</h3>
-            <p className="text-decoration-none">
-              3 service subscriptions required for the 12 month Fixed Tarriff
-            </p>
-            <p>
-              Use my referral code 8436166 when you sign up to help keep my
-              energy bills low
-            </p>
-            <Box sx={{ "& button": { m: 2 } }}>
-              <Button variant="outlined" size="large">
-                Join Here
-              </Button>
-            </Box>
-          </article>
-        </section>
-      </a>
+        <a
+          href="https://uw.partners/samuel.morgan1/join"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-decoration-none  text-white"
+        >
+          <Box
+            sx={{
+              // boxShadow: " rgba(149, 157, 165, 0.2) 0px 8px 24px;",
+              boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;',
+            }}
+            className="  d-flex flex-col align-items-center padding  rounded-lg  p-4 m-12"
+          >
+            <article className=" text-center text-decoration-none">
+              <h2 className="text-decoration-none">
+                You could save
+                <span className="bold"> £ {Math.round(savings)}</span>
+              </h2>
+              <h3 className="text-decoration-none">
+                Join the Utility Warehouse
+              </h3>
+              <p className="text-decoration-none">
+                3 service subscriptions required for the 12 month Fixed Tarriff
+              </p>
+              <p>
+                Use my referral code 8436166 when you sign up to help keep my
+                energy bills low
+              </p>
+              <Box
+                sx={{
+                  '& button': { m: 2 },
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  size="large"
+                  className="text-white border-white"
+                  sx={{
+                    boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;',
+                  }}
+                >
+                  Join Here
+                </Button>
+              </Box>
+            </article>
+          </Box>
+        </a>
+      </Box>
     </div>
   );
 };

@@ -1,15 +1,13 @@
 import { Background } from '../background/Background';
 import { Section } from '../layout/Section';
-import { NavbarTwoColumns } from '../navigation/NavbarTwoColumns';
-import { Logo } from './Logo';
 import { MoreInfo } from './MoreInfo';
 import { InputTable } from './Table';
 
 const Hero = () => (
-  <Background color="bg-gray-100">
-    <Section yPadding="py-6">
-      <NavbarTwoColumns logo={<Logo xl />}>
-        {/* <li>
+  <Background color="bg-blue-50">
+    {/* <Section yPadding="py-6"> */}
+    {/* <NavbarTwoColumns logo={<Logo xl />}> */}
+    {/* <li>
           <Link href="https://github.com/ixartz/Next-JS-Landing-Page-Starter-Template">
             <a>GitHub</a>
           </Link>
@@ -19,10 +17,10 @@ const Hero = () => (
             <a>Sign in</a>
           </Link>
         </li> */}
-      </NavbarTwoColumns>
-    </Section>
+    {/* </NavbarTwoColumns> */}
+    {/* </Section> */}
 
-    <Section yPadding="pt-20 pb-32 mw-100">
+    <Section yPadding="px-0 pb-32 mw-100">
       <InputTable />
       <MoreInfo />
       {/* <HeroOneButton
