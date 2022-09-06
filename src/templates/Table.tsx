@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
 
+import { Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
@@ -19,13 +20,15 @@ const InputTable = () => {
     setWidth(window.innerWidth);
   };
   useEffect(() => {
-    window.addEventListener('resize', updateDimensions);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', updateDimensions);
+    }
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  const uWFixedRate = 3650;
+  let uWFixedRate = 3650;
 
-  // uWFixedRate = 4212;
+  uWFixedRate = 4212;
   // Unit Rate
   // 69.697 pence per kWh
   // Standing Charge
@@ -215,11 +218,9 @@ const InputTable = () => {
 
       <Box
         sx={{}}
-        className={`d-flex flex-col w-100 px-6 my-12 ${
-          width > 400 ? 'px-12' : ''
-        }`}
+        className={`d-flex flex-col w-100  my-12 ${width > 400 ? 'px-12' : ''}`}
       >
-        <div className="d-flex flex-row w-100 gap-8 ">
+        <div className="d-flex flex-row flex-wrap w-100 gap-8 ">
           <span className="d-flex flex-row py-4">
             <p
               className={`m-0 cursor-pointer px-2 py-1  slate-900 	border-blue-600 border-y-2 border-l-2  rounded-l ${
@@ -638,20 +639,20 @@ const InputTable = () => {
         }}
         className="d-flex align-items-center justify-center"
       >
-        <a
-          href="https://uw.partners/samuel.morgan1/join"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-decoration-none  text-white"
+        <Box
+          sx={{
+            // boxShadow: " rgba(149, 157, 165, 0.2) 0px 8px 24px;",
+            boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;',
+          }}
+          className="  d-flex flex-col align-items-center padding  rounded-lg  p-4 m-12"
         >
-          <Box
-            sx={{
-              // boxShadow: " rgba(149, 157, 165, 0.2) 0px 8px 24px;",
-              boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;',
-            }}
-            className="  d-flex flex-col align-items-center padding  rounded-lg  p-4 m-12"
-          >
-            <article className=" text-center text-decoration-none">
+          <article className=" text-center text-decoration-none">
+            <a
+              href="https://uw.partners/samuel.morgan1/join"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-decoration-none  text-white"
+            >
               <h2 className="text-decoration-none">
                 You could save
                 <span className="bold"> £ {Math.round(savings)}</span>
@@ -662,29 +663,39 @@ const InputTable = () => {
               <p className="text-decoration-none">
                 3 service subscriptions required for the 12 month Fixed Tarriff
               </p>
-              <p>
-                Use my referral code 8436166 when you sign up to help keep my
-                energy bills low
-              </p>
-              <Box
-                sx={{
-                  '& button': { m: 2 },
-                }}
-              >
-                <Button
-                  variant="outlined"
-                  size="large"
-                  className="text-white border-white"
-                  sx={{
-                    boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;',
+            </a>
+            <p className="text-decoration-none  text-white">
+              Use my referral code{' '}
+              <Tooltip title="Click to Copy" placement="top">
+                <h4
+                  className="bold cursor-pointer"
+                  onClick={() => {
+                    navigator.clipboard.writeText('8436166');
                   }}
                 >
-                  Join Here
-                </Button>
-              </Box>
-            </article>
-          </Box>
-        </a>
+                  8436166
+                </h4>
+              </Tooltip>
+              when you sign up to help keep my energy bills low
+            </p>
+            <Box
+              sx={{
+                '& button': { m: 2 },
+              }}
+            >
+              <Button
+                variant="outlined"
+                size="large"
+                className="text-white border-white"
+                sx={{
+                  boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;',
+                }}
+              >
+                Join Here
+              </Button>
+            </Box>
+          </article>
+        </Box>
       </Box>
     </div>
   );
