@@ -22,6 +22,9 @@ const InputTable = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', updateDimensions);
+      setTimeout(() => {
+        setWidth(window.innerWidth);
+      }, 100);
     }
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
@@ -466,12 +469,12 @@ const InputTable = () => {
                         sx={{
                           backgroundColor:
                             row.profit > 0
-                              ? "#6abc85"
+                              ? '#6abc85'
                               : row.profit === 0
-                              ? ""
-                              : "#ec7979",
-                          color: row.profit !== 0 ? "white" : "",
-                          fontWeight: "bold",
+                              ? ''
+                              : '#ec7979',
+                          color: row.profit !== 0 ? 'white' : '',
+                          fontWeight: 'bold',
                         }}
                         /* eslint-enable */
                         align="right"
@@ -544,11 +547,11 @@ const InputTable = () => {
                     backgroundColor:
                       savings / rows.length >= 0
                         ? savings / rows.length !== 0
-                          ? "#6abc85"
-                          : "#f2b74c"
-                        : "red",
-                    color: "white",
-                    fontWeight: "bold",
+                          ? '#6abc85'
+                          : '#f2b74c'
+                        : 'red',
+                    color: 'white',
+                    fontWeight: 'bold',
                   }}
                   /* eslint-enable */
 
