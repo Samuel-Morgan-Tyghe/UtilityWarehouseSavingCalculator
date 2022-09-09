@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
 
-import { Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -31,7 +29,7 @@ const InputTable = () => {
 
   let uWFixedRate = 3650;
 
-  uWFixedRate = 4212;
+  uWFixedRate = 2500;
   // Unit Rate
   // 69.697 pence per kWh
   // Standing Charge
@@ -103,7 +101,7 @@ const InputTable = () => {
         ...row,
         auxPredictionsCosts: initCost * (row.auxPredictions / auxDenominator),
         variableTarriffCosts: initCost * (row.variableTarriff / vTDenominator),
-        uWFixedRateCosts: initCost * (uWFixedRate / 12 / vTDenominator),
+        uWFixedRateCosts: initCost * (uWFixedRate / pcDenominator),
         priceCapCosts: initCost * (row.priceCap / pcDenominator),
         increaseRate: useOffGem
           ? row.variableTarriff / vTDenominator
@@ -369,7 +367,7 @@ const InputTable = () => {
                   </TableCell>
                 )}
                 <TableCell align="right">
-                  Utility Warehouse fixed Year rate Monthly Cost *
+                  Goverment fixed Year rate Monthly Cost *
                 </TableCell>
                 <TableCell align="right">Savings</TableCell>
               </TableRow>
@@ -633,7 +631,7 @@ const InputTable = () => {
           </Table>
         </TableContainer>
       </Box>
-      <Box
+      {/* <Box
         sx={{
           height: '100vh',
           background:
@@ -699,7 +697,7 @@ const InputTable = () => {
             </Box>
           </article>
         </Box>
-      </Box>
+      </Box> */}
     </div>
   );
 };
